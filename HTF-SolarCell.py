@@ -38,6 +38,7 @@ eps_0 = 8.8542e-14
 D_n, D_p, L_p, L_n, tau_n, tau_p, eps_p, eps_n, N_a, N_d, E_gn, E_gp, N_cp, N_vp, N_cn, N_vn, S_n, S_p, W_n, W_p, X_n, X_p, Ta, S_i = 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
 data_1, data_2, data_3, data_4 = [], [], [], []
 wlengths, rows, N_0 = [], [], []
+file_nameR, file_nameT = '', ''
 isCheck = True
 
 ###########################################################################
@@ -71,7 +72,7 @@ class PrincipalPanel ( wx.Panel ):
 
 		MrLayout.Add( self.Titletext, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL|wx.TOP, 25 )
 
-		self.Introtext = wx.StaticText( self, wx.ID_ANY, u"In this program we focus on presenting a software developed for theorical calculations of Heterojunction Thin Film Solar Cells (HTFSC) the results includes graphics of Efficiency, FF, Voc and Jsc values in function of the Energy Band Gab and the Thickness of the Absorbent Layer. It's necesary to know the next values for run the simulation, you can consultate the instruction file or write a mail with yours doubts.", wx.DefaultPosition, wx.Size( 750,60 ), wx.ALIGN_CENTER_HORIZONTAL )
+		self.Introtext = wx.StaticText( self, wx.ID_ANY, u"In this program we focus on presenting a software developed for theorical calculations of Heterojunction Thin Film Solar Cells (HTFSC) the results includes graphics of Efficiency, FF, Voc and Jsc values in function of the Energy Band Gap and the Thickness of the Absorbent Layer. It's necesary to know the next values for run the simulation, you can consultate the instruction file or write a mail with yours doubts.", wx.DefaultPosition, wx.Size( 750,60 ), wx.ALIGN_CENTER_HORIZONTAL )
 		self.Introtext.Wrap( -1 )
 
 		self.Introtext.SetFont( wx.Font( 10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "Consolas" ) )
@@ -204,14 +205,14 @@ class PrincipalPanel ( wx.Panel ):
 
 		bSizer12.Add( ( 0, 28), 0, wx.ALL|wx.EXPAND, 5 )
 
-		self.Gabtext = wx.StaticText( self.Sc_parameters, wx.ID_ANY, u"Energy Gab variation [eV]", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.Gabtext.Wrap( -1 )
+		self.Gaptext = wx.StaticText( self.Sc_parameters, wx.ID_ANY, u"Energy Gap variation [eV]", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.Gaptext.Wrap( -1 )
 
-		self.Gabtext.SetFont( wx.Font( 10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "Consolas" ) )
-		self.Gabtext.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
-		self.Gabtext.SetBackgroundColour( wx.Colour( 255, 255, 255 ) )
+		self.Gaptext.SetFont( wx.Font( 10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "Consolas" ) )
+		self.Gaptext.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
+		self.Gaptext.SetBackgroundColour( wx.Colour( 255, 255, 255 ) )
 
-		bSizer12.Add( self.Gabtext, 0, wx.ALL, 8 )
+		bSizer12.Add( self.Gaptext, 0, wx.ALL, 8 )
 
 		self.Thicktext1 = wx.StaticText( self.Sc_parameters, wx.ID_ANY, u"Thickness variation [cm]", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.Thicktext1.Wrap( -1 )
@@ -607,8 +608,23 @@ class PrincipalPanel ( wx.Panel ):
 
 		bSizer25.Add( self.graphicButton, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
 
+		self.exportButton = wx.Button( self.Sc_parameters, wx.ID_ANY, u"Export", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.exportButton.SetFont( wx.Font( 10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, "Consolas" ) )
+		self.exportButton.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
+		self.exportButton.SetBackgroundColour( wx.Colour( 255, 255, 255 ) )
+
+		bSizer25.Add( self.exportButton, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
 
 		bSizer24.Add( bSizer25, 0, wx.ALIGN_CENTER, 5 )
+
+		bSizer161 = wx.BoxSizer( wx.HORIZONTAL )
+
+		self.m_gauge1 = wx.Gauge( self.Sc_parameters, wx.ID_ANY, 100, wx.DefaultPosition, wx.DefaultSize, wx.GA_HORIZONTAL )
+		self.m_gauge1.SetValue( 0 )
+		bSizer161.Add( self.m_gauge1, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
+
+
+		bSizer24.Add( bSizer161, 1, wx.ALIGN_CENTER|wx.ALL, 5 )
 
 
 		bSizer16.Add( bSizer24, 1, wx.EXPAND, 5 )
@@ -656,9 +672,12 @@ class PrincipalPanel ( wx.Panel ):
 		self.Layout()
 
 		# Connect Events
+		self.importTButton.Hide()
 		self.calculationButton.Hide()
-		self.importRButton.Bind( wx.EVT_BUTTON, self.importRT)
-		self.importTButton.Bind( wx.EVT_BUTTON, self.importRT)
+		self.exportButton.Hide()
+		self.graphicButton.Hide()
+		self.importRButton.Bind( wx.EVT_BUTTON, self.importR)
+		self.importTButton.Bind( wx.EVT_BUTTON, self.importT)
 		self.calculationButton.Bind( wx.EVT_BUTTON, self.calculateFunc )
 		self.graphicButton.Bind( wx.EVT_BUTTON, self.graphs )
 		self.exportButton.Bind( wx.EVT_BUTTON, self.export )
@@ -712,9 +731,7 @@ class PrincipalPanel ( wx.Panel ):
 		L_p, tau_p = checkfp()
 		L_n, tau_n = checkfn()
 		file_name = LoadFile(self)
-		file_nameR = LoadFile(self)
-		bookR = xlrd.open_workbook(filenameR)
-		file_nameT = LoadFile(self)
+		bookR = xlrd.open_workbook(file_nameR)
 		bookT = xlrd.open_workbook(file_nameT)
 		sheetR = bookR.sheet_by_index(0)
 		sheetT = bookT.sheet_by_index(0)
@@ -724,23 +741,36 @@ class PrincipalPanel ( wx.Panel ):
 		for i in range(sheet.nrows):#, row in enumerate(range(sheet.nrows)):
 			if i <= 1:
 				continue	
-			r, rR, rT = [], [], []
+			r = []
 			for j in [0,1]:
 				r.append(sheet.cell_value(i, j))
-				rR.append(sheetR.cell_value(i, j))
-				rT.append(sheetT.cell_value(i, j))	
 			rows.append(r)
 			wlengths.append(r[0])
 			N_0.append(r[1])
+		print("Done!")
+		for i in range(sheetR.nrows):#, row in enumerate(range(sheet.nrows)):
+			if i <= 1:
+				continue	
+			rR = []
+			for j in [0,1]:
+				rR.append(sheetR.cell_value(i, j))
 			R.append(rR[1])
+		print("Done!")
+		for i in range(sheetT.nrows):#, row in enumerate(range(sheet.nrows)):
+			if i <= 1:
+				continue	
+			rT = []
+			for j in [0,1]:
+				rT.append(sheetT.cell_value(i, j))	
+			print(rT)
 			T.append(rT[1])
 ###########################################################################
 ## Simulation
 ###########################################################################
 		wlengths = 1e-7 * np.array(wlengths, dtype='float64') #[cm]
 		N_0 = np.array(N_0, dtype='float64') / (1240.0/(wlengths*1e7))
-		T = numpy.array(T, dtype='float64')
-		R = numpy.array(R, dtype='float64')	
+		T = np.array(T, dtype='float64')
+		R = np.array(R, dtype='float64')	
 		# values for thickness
 		thickness = np.linspace(W_pmin, W_pmax, num=Steps, endpoint=True, dtype='float64')
 		# values for Gap
@@ -815,9 +845,18 @@ class PrincipalPanel ( wx.Panel ):
 
 		alldata = svdata([data_1,data_2,data_3,data_4])
 		self.graphicButton.Show()
+		self.exportButton.Show()
 
-	def importRT( self, event):
-		self.m_gauge1.SetValue( 0 )
+	def importR( self, event):
+		global file_nameR
+		self.m_gauge1.SetValue( 33 )
+		file_nameR = LoadFile(self)
+		self.importTButton.Show()
+
+	def importT( self, event):
+		global file_nameT
+		self.m_gauge1.SetValue( 66 )
+		file_nameT = LoadFile(self)
 		self.calculationButton.Show()
 
 	def graphs( self, event ):		
@@ -1139,19 +1178,19 @@ class PrincipalPanel ( wx.Panel ):
 		global isCheck
 		isCheck = self.m_checkBox3.GetValue()
 		if isCheck:
-			exp_data1 = numpy.stack((data_1), axis=-1)
-			numpy.savetxt('result-data1.txt', exp_data1)
-			exp_data2 = numpy.stack((data_2), axis=-1)
-			numpy.savetxt('result-data2.txt', exp_data2)
-			exp_data3 = numpy.stack((data_2), axis=-1)
-			numpy.savetxt('result-data3.txt', exp_data3)
-			exp_data4 = numpy.stack((data_2), axis=-1)
-			numpy.savetxt('result-data4.txt', exp_data4)
+			exp_data1 = np.stack((data_1), axis=-1)
+			np.savetxt('result-data1.txt', exp_data1)
+			exp_data2 = np.stack((data_2), axis=-1)
+			np.savetxt('result-data2.txt', exp_data2)
+			exp_data3 = np.stack((data_2), axis=-1)
+			np.savetxt('result-data3.txt', exp_data3)
+			exp_data4 = np.stack((data_2), axis=-1)
+			np.savetxt('result-data4.txt', exp_data4)
 		else:
-			exp_data1 = numpy.stack((data_1), axis=-1)
-			numpy.savetxt('result-data1.txt', exp_data1)
-			exp_data4 = numpy.stack((data_2), axis=-1)
-			numpy.savetxt('result-data4.txt', exp_data4)
+			exp_data1 = np.stack((data_1), axis=-1)
+			np.savetxt('result-data1.txt', exp_data1)
+			exp_data4 = np.stack((data_2), axis=-1)
+			np.savetxt('result-data4.txt', exp_data4)
 
 
 class Plot(wx.Panel):
