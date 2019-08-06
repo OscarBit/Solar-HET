@@ -623,7 +623,7 @@ class PrincipalPanel ( wx.Panel ):
 		self.m_gauge1.SetValue( 0 )
 		bSizer161.Add( self.m_gauge1, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
 
-
+		bSizer24.Add( ( 0, 20), 0, wx.ALL|wx.EXPAND, 5 )
 		bSizer24.Add( bSizer161, 1, wx.ALIGN_CENTER|wx.ALL, 5 )
 
 
@@ -731,39 +731,16 @@ class PrincipalPanel ( wx.Panel ):
 		L_p, tau_p = checkfp()
 		L_n, tau_n = checkfn()
 		file_name = LoadFile(self)
-		bookR = xlrd.open_workbook(file_nameR)
-		bookT = xlrd.open_workbook(file_nameT)
-		sheetR = bookR.sheet_by_index(0)
-		sheetT = bookT.sheet_by_index(0)
-		book = xlrd.open_workbook(file_name)
-		sheet = book.sheet_by_index(0)
-		wlengths, rows, N_0, R, T = [], [], [], [], []
-		for i in range(sheet.nrows):#, row in enumerate(range(sheet.nrows)):
-			if i <= 1:
-				continue	
-			r = []
-			for j in [0,1]:
-				r.append(sheet.cell_value(i, j))
-			rows.append(r)
-			wlengths.append(r[0])
-			N_0.append(r[1])
-		print("Done!")
-		for i in range(sheetR.nrows):#, row in enumerate(range(sheet.nrows)):
-			if i <= 1:
-				continue	
-			rR = []
-			for j in [0,1]:
-				rR.append(sheetR.cell_value(i, j))
-			R.append(rR[1])
-		print("Done!")
-		for i in range(sheetT.nrows):#, row in enumerate(range(sheet.nrows)):
-			if i <= 1:
-				continue	
-			rT = []
-			for j in [0,1]:
-				rT.append(sheetT.cell_value(i, j))	
-			print(rT)
-			T.append(rT[1])
+		Rneq = np.loadtxt(file_nameR, dtype=float, usecols=(1,), skiprows=1)
+		Tneq = np.loadtxt(file_nameT, dtype=float, usecols=(1,), skiprows=1)
+		wlengthsneq = np.loadtxt(file_name, dtype=float, usecols=(0,), skiprows=1)
+		N_0neq = np.loadtxt(file_name, dtype=float, usecols=(0,), skiprows=1)
+		wlengths, N_0, R, T = [], [], [], []
+		for i in range(len(Rneq)):
+			R.append( Rneq[i] )
+			T.append( Tneq[i] )
+			wlengths.append( wlengthsneq[i] )
+			N_0.append( N_0neq[i] )
 ###########################################################################
 ## Simulation
 ###########################################################################
@@ -1228,7 +1205,7 @@ def LoadFile(self):
 
 		#app = wx.PySimpleApp(0)
 		dir = "/home"
-		save_dlg = wx.FileDialog(self, message='Choose Files to be Imported', defaultDir=dir, defaultFile= '', wildcard="Excel Files(*.xls)|*.xls|Text files (*.txt)|*.txt", 
+		save_dlg = wx.FileDialog(self, message='Choose Files to be Imported', defaultDir=dir, defaultFile= '', wildcard="Text files (*.txt)|*.txt", 
 			style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST)
 		if save_dlg.ShowModal() == wx.ID_OK:
 			path = save_dlg.GetPath()
