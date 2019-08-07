@@ -97,7 +97,7 @@ class PrincipalPanel ( wx.Panel ):
 
 		col1 = wx.BoxSizer( wx.VERTICAL )
 
-		self.Parametertext = wx.StaticText( self.Sc_parameters, wx.ID_ANY, u"Parameteres.", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.Parametertext = wx.StaticText( self.Sc_parameters, wx.ID_ANY, u"Parameters.", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.Parametertext.Wrap( -1 )
 
 		self.Parametertext.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, "Consolas" ) )
@@ -341,7 +341,7 @@ class PrincipalPanel ( wx.Panel ):
 
 		gSizer4.Add( self.valD_n, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
 
-		self.valS_p = wx.TextCtrl( self.Sc_parameters, wx.ID_ANY, u"1.0e7", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.valS_p = wx.TextCtrl( self.Sc_parameters, wx.ID_ANY, u"10", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.valS_p.SetFont( wx.Font( 10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "Consolas" ) )
 		self.valS_p.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
 		self.valS_p.SetBackgroundColour( wx.Colour( 255, 255, 255 ) )
@@ -383,7 +383,7 @@ class PrincipalPanel ( wx.Panel ):
 
 		gSizer4.Add( self.valX_n, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
 
-		self.valN_a = wx.TextCtrl( self.Sc_parameters, wx.ID_ANY, u"2.0e16", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.valN_a = wx.TextCtrl( self.Sc_parameters, wx.ID_ANY, u"1.0e17", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.valN_a.SetFont( wx.Font( 10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "Consolas" ) )
 		self.valN_a.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
 		self.valN_a.SetBackgroundColour( wx.Colour( 255, 255, 255 ) )
@@ -412,7 +412,7 @@ class PrincipalPanel ( wx.Panel ):
 
 		bSizer181.Add( self.m_radioBtn2, 0, wx.ALIGN_CENTER|wx.ALL, 0 )
 
-		self.valLorT_p = wx.TextCtrl( self.Sc_parameters, wx.ID_ANY, u"7.19e-4", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.valLorT_p = wx.TextCtrl( self.Sc_parameters, wx.ID_ANY, u"8.0e-4", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.valLorT_p.SetFont( wx.Font( 10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "Consolas" ) )
 		self.valLorT_p.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
 		self.valLorT_p.SetBackgroundColour( wx.Colour( 255, 255, 255 ) )
@@ -697,7 +697,7 @@ class PrincipalPanel ( wx.Panel ):
 ## Read: variables & spectrum data 
 ###########################################################################
 		global D_n, D_p, eps_p, eps_n, N_a, N_d, E_gn, E_gp, E_gpmin, E_gpmax, N_cp, N_vp, N_cn, N_vn, S_n, S_p, W_n, W_p, W_pmin, W_pmax, X_n, X_p, Ta, S_i, Steps, Vib_steps, R, T, L_p, tau_p, L_p, tau_p
-		global N_0, wlengths, data_1, data_2, data_3, data_4, R, T
+		global N_0, wlengths, data_1, data_2, data_3, data_4, R, T, wait
 		data_1, data_2, data_3, data_4 = [], [], [], []
 		D_n = np.float_(self.valD_n.GetLineText(0))
 		D_p = np.float_(self.valD_p.GetLineText(0))
@@ -725,7 +725,7 @@ class PrincipalPanel ( wx.Panel ):
 		S_i = np.float_(self.valS_i.GetLineText(0))
 		Steps = int(self.valSteps.GetLineText(0))
 		Vib_steps = int(self.valVib_steps.GetLineText(0))
-		waiter = 100 / Steps * 2
+		waiter = 100 / (Steps * 2)
 		wait = 0
 		L_p, tau_p = checkfp()
 		L_n, tau_n = checkfn()
@@ -740,6 +740,8 @@ class PrincipalPanel ( wx.Panel ):
 			T.append( Tneq[i] )
 			wlengths.append( wlengthsneq[i] )
 			N_0.append( N_0neq[i] )
+		#R = 0.1
+		#T = 0.9
 ###########################################################################
 ## Simulation
 ###########################################################################
@@ -822,6 +824,7 @@ class PrincipalPanel ( wx.Panel ):
 		alldata = svdata([data_1,data_2,data_3,data_4])
 		self.graphicButton.Show()
 		self.exportButton.Show()
+		self.m_gauge1.SetValue( 0 )
 
 	def importR( self, event):
 		global file_nameR
@@ -855,34 +858,34 @@ class PrincipalPanel ( wx.Panel ):
 			plotter0 = PlotNotebook(graphframe0)
 			axes7 = plotter0.add('Short-circuit current density').gca()
 			axes7.plot(gap, data_3[4], linewidth=1.2)
-			axes7.plot(gap, data_3[4], '.', label=('$S_{i} = $' + ss_si), linewidth=0.8)
+			axes7.plot(gap, data_3[4], '.', linewidth=0.8)
 			axes7.plot(gap, data_4[4], '--', linewidth=1.2)
-			axes7.plot(gap, data_4[4], '*', label='$S_{i} = 0$', linewidth=0.8)
-			axes7.legend(loc='best', fontsize =18)
+			axes7.plot(gap, data_4[4], '*', linewidth=0.8)
+			#axes7.legend(loc='best', fontsize =18)
 			axes7.set_xlabel('Band gap [eV]', fontsize =18)
 			axes7.set_ylabel('$J_{sc}$ [mA]', fontsize =18)
 			axes7.set_title('Short-circuit current density', fontsize =30)
 			axes7.tick_params(labelsize=18)
 			axes7.grid('on')
 
-			axes8 = plotter0.add('Filling factor').gca()
+			axes8 = plotter0.add('Fill factor').gca()
 			axes8.plot(gap, data_3[3], linewidth=1.2)
-			axes8.plot(gap, data_3[3], '.', label=('$S_{i} = $' + ss_si), linewidth=0.8)
+			axes8.plot(gap, data_3[3], '.', linewidth=0.8)
 			axes8.plot(gap, data_4[3], '--', linewidth=1.2)
-			axes8.plot(gap, data_4[3], '*', label='$S_{i} = 0$', linewidth=0.8)
-			axes8.legend(loc='best', fontsize =18)
+			axes8.plot(gap, data_4[3], '*', linewidth=0.8)
+			#axes8.legend(loc='best', fontsize =18)
 			axes8.set_xlabel('Band gap [eV]', fontsize =18)
 			axes8.set_ylabel('FF [%]', fontsize =18)
-			axes8.set_title('Filling factor', fontsize =30)
+			axes8.set_title('Fill factor', fontsize =30)
 			axes8.tick_params(labelsize=18)
 			axes8.grid('on')
 
 			axes9 = plotter0.add('Open-circuit voltage').gca()
 			axes9.plot(gap, data_3[2]*1e3, linewidth=1.2)
-			axes9.plot(gap, data_3[2]*1e3, '.', label=('$S_{i} = $' + ss_si), linewidth=0.8)
+			axes9.plot(gap, data_3[2]*1e3, '.', linewidth=0.8)
 			axes9.plot(gap, data_4[2]*1e3, '--', linewidth=1.2)
-			axes9.plot(gap, data_4[2]*1e3, '*', label='$S_{i} = 0$', linewidth=0.8)
-			axes9.legend(loc='best', fontsize =18)
+			axes9.plot(gap, data_4[2]*1e3, '*', linewidth=0.8)
+			#axes9.legend(loc='best', fontsize =18)
 			axes9.set_xlabel('Band gap [eV]', fontsize =18)
 			axes9.set_ylabel('$V_{oc}$ [mV]', fontsize =18)
 			axes9.set_title('Open-circuit voltage', fontsize =30)
@@ -891,10 +894,10 @@ class PrincipalPanel ( wx.Panel ):
 
 			axes0 = plotter0.add('Efficiency').gca()
 			axes0.plot(gap, data_3[1], linewidth=1.2)
-			axes0.plot(gap, data_3[1], '.', label=('$S_{i} = $' + ss_si), linewidth=0.8)
+			axes0.plot(gap, data_3[1], '.', linewidth=0.8)
 			axes0.plot(gap, data_4[1], '--', linewidth=1.2)
-			axes0.plot(gap, data_4[1], '*', label='$S_{i} = 0$', linewidth=0.8)
-			axes0.legend(loc='best', fontsize =18)
+			axes0.plot(gap, data_4[1], '*', linewidth=0.8)
+			#axes0.legend(loc='best', fontsize =18)
 			axes0.set_xlabel('Band gap [eV]', fontsize =18)
 			axes0.set_ylabel('$\eta$ [%]', fontsize =18)
 			axes0.set_title('Efficiency', fontsize =30)
@@ -918,33 +921,33 @@ class PrincipalPanel ( wx.Panel ):
 			axes1 = plotter1.add('Short-circuit current density').gca()
 			axes1.plot(thickness*1e7, data_1[4], linewidth=1.2)
 			axes1.plot(thickness*1e7, data_2[4], '--', linewidth=1.2)
-			axes1.plot(thickness*1e7, data_2[4], '.', label=('$S_{i} = $' + ss_si), linewidth=0.8)
-			axes1.plot(thickness*1e7, data_1[4], '*', label='$S_{i} = 0$', linewidth=0.8)
-			axes1.legend(loc='best', fontsize =18)
+			axes1.plot(thickness*1e7, data_2[4], '.', linewidth=0.8)
+			axes1.plot(thickness*1e7, data_1[4], '*', linewidth=0.8)
+			#axes1.legend(loc='best', fontsize =18)
 			axes1.set_xlabel('Thickness [nm]', fontsize =18)
 			axes1.set_ylabel('$J_{sc}$ [mA]', fontsize =18)
 			axes1.set_title('Short-circuit current density', fontsize =30)
 			axes1.tick_params(labelsize=18)
 			axes1.grid('on')
 
-			axes2 = plotter1.add('Filling factor').gca()
+			axes2 = plotter1.add('Fill factor').gca()
 			axes2.plot(thickness*1e7, data_1[3], linewidth=1.2)
 			axes2.plot(thickness*1e7, data_2[3], '--', linewidth=1.2)
-			axes2.plot(thickness*1e7, data_2[3], '.', label=('$S_{i} = $' + ss_si), linewidth=0.8)
-			axes2.plot(thickness*1e7, data_1[3], '*', label='$S_{i} = 0$', linewidth=0.8)
-			axes2.legend(loc='best', fontsize =18)
+			axes2.plot(thickness*1e7, data_2[3], '.', linewidth=0.8)
+			axes2.plot(thickness*1e7, data_1[3], '*', linewidth=0.8)
+			#axes2.legend(loc='best', fontsize =18)
 			axes2.set_xlabel('Thickness [nm]', fontsize =18)
 			axes2.set_ylabel('FF [%]', fontsize =18)
-			axes2.set_title('Filling factor', fontsize =30)
+			axes2.set_title('Fill factor', fontsize =30)
 			axes2.tick_params(labelsize=18)
 			axes2.grid('on')
 
 			axes3 = plotter1.add('Open-circuit voltage').gca()
 			axes3.plot(thickness*1e7, data_1[2]*1e3, linewidth=1.2)
 			axes3.plot(thickness*1e7, data_2[2]*1e3, '--', linewidth=1.2)
-			axes3.plot(thickness*1e7, data_2[2]*1e3, '.', label=('$S_{i} = $' + ss_si), linewidth=0.8)
-			axes3.plot(thickness*1e7, data_1[2]*1e3, '*', label='$S_{i} = 0$', linewidth=0.8)
-			axes3.legend(loc='best', fontsize =18)
+			axes3.plot(thickness*1e7, data_2[2]*1e3, '.', linewidth=0.8)
+			axes3.plot(thickness*1e7, data_1[2]*1e3, '*', linewidth=0.8)
+			#axes3.legend(loc='best', fontsize =18)
 			axes3.set_xlabel('Thickness [nm]', fontsize =18)
 			axes3.set_ylabel('$V_{oc}$ [mV]', fontsize =18)
 			axes3.set_title('Open-circuit voltage', fontsize =30)
@@ -954,9 +957,9 @@ class PrincipalPanel ( wx.Panel ):
 			axes4 = plotter1.add('Efficiency').gca()
 			axes4.plot(thickness*1e7, data_1[1], linewidth=1.2)
 			axes4.plot(thickness*1e7, data_2[1], '--', linewidth=1.2)
-			axes4.plot(thickness*1e7, data_2[1], '.', label=('$S_{i} = $' + ss_si), linewidth=0.8)
-			axes4.plot(thickness*1e7, data_1[1], '*', label='$S_{i} = 0$', linewidth=0.8)
-			axes4.legend(loc='best', fontsize =18)
+			axes4.plot(thickness*1e7, data_2[1], '.', linewidth=0.8)
+			axes4.plot(thickness*1e7, data_1[1], '*', linewidth=0.8)
+			#axes4.legend(loc='best', fontsize =18)
 			axes4.set_xlabel('Thickness [nm]', fontsize =18)
 			axes4.set_ylabel('$\eta$ [%]', fontsize =18)
 			axes4.set_title('Efficiency', fontsize =30)
@@ -975,28 +978,28 @@ class PrincipalPanel ( wx.Panel ):
 ###########################################################################
 			axes7 = plotter0.add('Short-circuit current density').gca()
 			axes7.plot(gap, data_4[4], '--', linewidth=1.2)
-			axes7.plot(gap, data_4[4], '*', label='$S_{i} = 0$', linewidth=0.8)
-			axes7.legend(loc='best', fontsize =18)
+			axes7.plot(gap, data_4[4], '*', linewidth=0.8)
+			#axes7.legend(loc='best', fontsize =18)
 			axes7.set_xlabel('Band gap [eV]', fontsize =18)
 			axes7.set_ylabel('$J_{sc}$ [mA]', fontsize =18)
 			axes7.set_title('Short-circuit current density', fontsize =30)
 			axes7.tick_params(labelsize=18)
 			axes7.grid('on')
 
-			axes8 = plotter0.add('Filling factor').gca()
+			axes8 = plotter0.add('Fill factor').gca()
 			axes8.plot(gap, data_4[3], '--', linewidth=1.2)
-			axes8.plot(gap, data_4[3], '*', label='$S_{i} = 0$', linewidth=0.8)
-			axes8.legend(loc='best', fontsize =18)
+			axes8.plot(gap, data_4[3], '*', linewidth=0.8)
+			#axes8.legend(loc='best', fontsize =18)
 			axes8.set_xlabel('Band gap [eV]', fontsize =18)
 			axes8.set_ylabel('FF [%]', fontsize =18)
-			axes8.set_title('Filling factor', fontsize =30)
+			axes8.set_title('Fill factor', fontsize =30)
 			axes8.tick_params(labelsize=18)
 			axes8.grid('on')
 
 			axes9 = plotter0.add('Open-circuit voltage').gca()
 			axes9.plot(gap, data_4[2]*1e3, '--', linewidth=1.2)
-			axes9.plot(gap, data_4[2]*1e3, '*', label='$S_{i} = 0$', linewidth=0.8)
-			axes9.legend(loc='best', fontsize =18)
+			axes9.plot(gap, data_4[2]*1e3, '*', linewidth=0.8)
+			#axes9.legend(loc='best', fontsize =18)
 			axes9.set_xlabel('Band gap [eV]', fontsize =18)
 			axes9.set_ylabel('$V_{oc}$ [mV]', fontsize =18)
 			axes9.set_title('Open-circuit voltage', fontsize =30)
@@ -1005,8 +1008,8 @@ class PrincipalPanel ( wx.Panel ):
 
 			axes0 = plotter0.add('Efficiency').gca()
 			axes0.plot(gap, data_4[1], '--', linewidth=1.2)
-			axes0.plot(gap, data_4[1], '*', label='$S_{i} = 0$', linewidth=0.8)
-			axes0.legend(loc='best', fontsize =18)
+			axes0.plot(gap, data_4[1], '*', linewidth=0.8)
+			#axes0.legend(loc='best', fontsize =18)
 			axes0.set_xlabel('Band gap [eV]', fontsize =18)
 			axes0.set_ylabel('$\eta$ [%]', fontsize =18)
 			axes0.set_title('Efficiency', fontsize =30)
@@ -1029,28 +1032,28 @@ class PrincipalPanel ( wx.Panel ):
 
 			axes1 = plotter1.add('Short-circuit current density').gca()
 			axes1.plot(thickness*1e7, data_1[4], linewidth=1.2)
-			axes1.plot(thickness*1e7, data_1[4], '*', label='$S_{i} = 0$', linewidth=0.8)
-			axes1.legend(loc='best', fontsize =18)
+			axes1.plot(thickness*1e7, data_1[4], '*', linewidth=0.8)
+			#axes1.legend(loc='best', fontsize =18)
 			axes1.set_xlabel('Thickness [nm]', fontsize =18)
 			axes1.set_ylabel('$J_{sc}$ [mA]', fontsize =18)
 			axes1.set_title('Short-circuit current density', fontsize =30)
 			axes1.tick_params(labelsize=18)
 			axes1.grid('on')
 
-			axes2 = plotter1.add('Filling factor').gca()
+			axes2 = plotter1.add('Fill factor').gca()
 			axes2.plot(thickness*1e7, data_1[3], linewidth=1.2)
-			axes2.plot(thickness*1e7, data_1[3], '*', label='$S_{i} = 0$', linewidth=0.8)
-			axes2.legend(loc='best', fontsize =18)
+			axes2.plot(thickness*1e7, data_1[3], '*', linewidth=0.8)
+			#axes2.legend(loc='best', fontsize =18)
 			axes2.set_xlabel('Thickness [nm]', fontsize =18)
 			axes2.set_ylabel('FF [%]', fontsize =18)
-			axes2.set_title('Filling factor', fontsize =30)
+			axes2.set_title('Fill factor', fontsize =30)
 			axes2.tick_params(labelsize=18)
 			axes2.grid('on')
 
 			axes3 = plotter1.add('Open-circuit voltage').gca()
 			axes3.plot(thickness*1e7, data_1[2]*1e3, linewidth=1.2)
-			axes3.plot(thickness*1e7, data_1[2]*1e3, '*', label='$S_{i} = 0$', linewidth=0.8)
-			axes3.legend(loc='best', fontsize =18)
+			axes3.plot(thickness*1e7, data_1[2]*1e3, '*', linewidth=0.8)
+			#axes3.legend(loc='best', fontsize =18)
 			axes3.set_xlabel('Thickness [nm]', fontsize =18)
 			axes3.set_ylabel('$V_{oc}$ [mV]', fontsize =18)
 			axes3.set_title('Open-circuit voltage', fontsize =30)
@@ -1059,8 +1062,8 @@ class PrincipalPanel ( wx.Panel ):
 
 			axes4 = plotter1.add('Efficiency').gca()
 			axes4.plot(thickness*1e7, data_1[1], linewidth=1.2)
-			axes4.plot(thickness*1e7, data_1[1], '*', label='$S_{i} = 0$', linewidth=0.8)
-			axes4.legend(loc='best', fontsize =18)
+			axes4.plot(thickness*1e7, data_1[1], '*', linewidth=0.8)
+			#axes4.legend(loc='best', fontsize =18)
 			axes4.set_xlabel('Thickness [nm]', fontsize =18)
 			axes4.set_ylabel('$\eta$ [%]', fontsize =18)
 			axes4.set_title('Efficiency', fontsize =30)
@@ -1082,7 +1085,7 @@ class PrincipalPanel ( wx.Panel ):
 		W_p = np.float_(self.valW_p.GetLineText(0))
 		E_gp = np.float_(self.valE_gp.GetLineText(0))
 
-		EQE0 = fdJ_ph(0) * 10/ N_0
+		EQE0 = fdJ_ph(0) / N_0
 		IQE0 = EQE0 / ( 1 - R)
 		wlengthsQE = []
 		EQE = [0.0]
@@ -1107,7 +1110,7 @@ class PrincipalPanel ( wx.Panel ):
 		axes5 = plotter2.add('Quantum Efficciency').gca()
 		axes5.plot(wlengthsQE, EQE, label='EQE', linewidth=1.2)
 		axes5.plot(wlengthsQE, IQE, '--', label='IQE', linewidth=1.2)
-		axes5.legend(loc='best', fontsize =18)
+		#axes5.legend(loc='best', fontsize =18)
 		axes5.set_xlabel('Wave length [nm]', fontsize =18)
 		axes5.set_ylabel('QE', fontsize =18)
 		axes5.set_title('Quantum Efficciency', fontsize =30)
@@ -1120,9 +1123,9 @@ class PrincipalPanel ( wx.Panel ):
 			v2, J2 = np.array(v2, dtype='float64'), np.array(J2, dtype='float64')
 			
 			axes6 = plotter2.add('Current density (Input parameters)').gca()
-			axes6.plot(v1, J1, label=('$S_i = 0.0$'), linewidth=1.2)
-			axes6.plot(v2, J2, '--', label=('$S_{i} = $' + ss_si), linewidth=1.2)
-			axes6.legend(loc='best', fontsize =18)
+			axes6.plot(v1, J1, linewidth=1.2)
+			axes6.plot(v2, J2, '--', linewidth=1.2)
+			#axes6.legend(loc='best', fontsize =18)
 			axes6.set_xlabel('Voltage [V]', fontsize =18)
 			axes6.set_ylabel('Current density [mA/cm²]', fontsize =18)
 			axes6.set_title('Current density (Input parameters)', fontsize =30)
@@ -1133,8 +1136,8 @@ class PrincipalPanel ( wx.Panel ):
 			v1, J1 = np.array(v1, dtype='float64'), np.array(J1, dtype='float64')
 			
 			axes6 = plotter2.add('Current density (Input parameters)').gca()
-			axes6.plot(v1, J1, label=('$S_i = 0.0$'), linewidth=1.2)
-			axes6.legend(loc='best', fontsize =18)
+			axes6.plot(v1, J1, linewidth=1.2)
+			#axes6.legend(loc='best', fontsize =18)
 			axes6.set_xlabel('Voltage [V]', fontsize =18)
 			axes6.set_ylabel('Current density [mA/cm²]', fontsize =18)
 			axes6.set_title('Current density (Input parameters)', fontsize =30)
@@ -1314,30 +1317,23 @@ def fdJ_ph(V):
 	b = ( S_p * L_p / D_p ) + alpha_n * L_p - np.exp( - alpha_n * ( W_n - x_n) ) * ( ( S_p * L_p / D_p) * np.cosh( ( W_n - x_n ) / L_p ) + np.sinh( ( W_n -x_n ) / L_p ) )
 	c = ( S_p * L_p / D_p ) * np.sinh( ( W_n - x_n ) / L_p ) + np.cosh( ( W_n - x_n ) / L_p )
 	d = alpha_n * L_p * np.exp( - alpha_n * (W_n - x_n) )
-	dJ_p = a*( b/c - d) * (1 / 10)
+	dJ_p = a * ( b / c - d)
 
 	dJ_n = []
 	a = N_0 * (1 - R) * T * alpha_p * L_n * np.exp( - (alpha_n * W_n + alpha_p * x_p) )  /  ( alpha_p**2 * L_n**2 - 1 )
 	b = ( S_n * L_n / D_n ) * ( np.cosh( ( W_p - x_p ) / L_n ) - np.exp( - alpha_p * ( W_p - x_p ) ) ) + np.sinh( ( W_p - x_p ) / L_n ) + alpha_p * L_n * np.exp( - alpha_p * ( W_p - x_p ) )
 	c = ( S_n * L_n / D_n ) * np.sinh( ( W_p - x_p ) / L_n ) + np.cosh( ( W_p - x_p ) / L_n )
 	d = alpha_p * L_n
-	dJ_n = a * ( d - b / c ) * (1 / 10)
+	dJ_n = a * ( d - b / c )
 
 	dJ_scr = []
 	dJ_scr = N_0 * (1 - R) * T * np.exp( - alpha_n * ( W_n - x_n ) ) * ( ( 1 - np.exp( - alpha_n * x_n ) ) + np.exp( - alpha_n * x_n ) * ( 1 - np.exp( - alpha_p * x_p ) ) )
-	dJ_scr = dJ_scr * (1 / 10)
 
 	dJ_RCEp = []
-
-	if x_p == W_p:
-		dJ_RCEp = N_0 * T * ( 1 - R) * np.exp( - alpha_n * W_n - alpha_p * W_p - 0 * alpha_p * ( W_p - x_p ) ) * ( 1 - np.exp( - 0 * alpha_p * x_p ) )
-	else:
-		dJ_RCEp = N_0 * T * ( 1 - R) * np.exp( - alpha_n * W_n - alpha_p * W_p - alpha_p * ( W_p - x_p ) ) * ( 1 - np.exp( - alpha_p * x_p ) )
-	dJ_RCEp = dJ_RCEp * (1 / 10)
+	dJ_RCEp = N_0 * T * ( 1 - R) * np.exp( - alpha_n * W_n - alpha_p * ( 2 * W_p - x_p ) ) * ( 1 - np.exp( - alpha_p * x_p ) )
 
 	dJ_RCEn = []
 	dJ_RCEn = N_0 * T * ( 1 - R) * np.exp( - alpha_n * W_n - alpha_p * 2 * W_p ) * ( 1 - np.exp( - alpha_n ) )
-	dJ_RCEn = dJ_RCEn * (1 / 10)
 
 	dJ_abs = []
 	a = N_0 * T * ( 1 - R) * alpha_p * ( L_n / ( alpha_p ** 2 * L_n ** 2 - 1 ) ) * np.exp( - alpha_n * W_n - alpha_p * W_p )
@@ -1345,18 +1341,17 @@ def fdJ_ph(V):
 	c = S_n * L_n / D_n * ( np.cosh( ( W_p -x_p ) / L_n ) - np.exp( - alpha_p * ( W_p - x_p) )) + np.sinh( ( W_p -x_p ) / L_n ) + alpha_p * L_n * np.exp( - alpha_p * ( W_p - x_p ) )
 	d = S_n * L_n / D_n * np.sinh( ( W_p - x_p ) / L_n ) + np.cosh( ( W_p - x_p ) / L_n )
 	dJ_abs = a * ( b - c / d)
-	dJ_abs = dJ_abs * (1 / 10)
+
 
 	dJ_win = []
 	a = N_0 * T * ( 1 - R) * alpha_n * L_p / ( alpha_n ** 2 * L_p ** 2 - 1 ) * np.exp( - alpha_n * ( W_n + x_n ) - alpha_p * ( 2 * W_p ) )
 	b = S_p * L_p / D_p * ( np.cosh( ( W_n - x_n ) / L_p ) - np.exp( -alpha_n * ( W_n - x_n ) ) ) + np.sinh( ( W_n - x_n ) / L_p ) + alpha_n * L_p * np.exp( alpha_n * ( W_n - x_n ) )
 	c = S_p * L_p / D_p * np.sinh( ( W_n - x_n ) / L_p ) + np.cosh( ( W_n - x_n ) / L_p )
 	dJ_win = a * ( alpha_n * L_p - b/c )
-	dJ_win = dJ_win * (1 / 10)
 
 	ans = []
 	ans = dJ_p + dJ_n + dJ_scr + dJ_RCEp + (dJ_RCEn)  + dJ_abs + dJ_win
-	return ans
+	return ans 
 
 
 def Jc(V):
@@ -1373,7 +1368,7 @@ def Jc(V):
     dJ_ph = []
     dJ_ph.append(fdJ_ph(V))
     J_ph = 0
-    J_ph = integrate.simps(dJ_ph, wlengths*1e7, even='avg') #scipy.integrate.fixed_quad(func, a, b, args=(), n=5) -https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.fixed_quad.html#scipy.integrate.fixed_quad-
+    J_ph = integrate.simps(dJ_ph, wlengths*1e7, even='avg') * (1 / 10) #scipy.integrate.fixed_quad(func, a, b, args=(), n=5) -https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.fixed_quad.html#scipy.integrate.fixed_quad-
 ###########################################################################
 # Dark photocurrent equations
 ###########################################################################
@@ -1381,22 +1376,20 @@ def Jc(V):
     a = q * D_p * p_0 / L_p
     b = ( S_p * L_p / D_p ) * np.cosh( ( W_n - x_n ) / L_p ) + np.sinh( ( W_n - x_n ) / L_p )
     c = ( S_p * L_p / D_p ) * np.sinh( ( W_n - x_n ) / L_p ) + np.cosh( ( W_n - x_n ) / L_p )
-    J_0p = a * ( b / c )
-    J_0p = J_0p * 1000
+    J_0p = a * ( b / c ) * 1000
 
     J_0n = 0.0
     a = q * D_n * n_0 / L_n
     b = ( S_n * L_n / D_n ) * np.cosh( ( W_p - x_p ) / L_n ) + np.sinh( ( W_p - x_p ) / L_n )
     c = ( S_n * L_n / D_n ) * np.sinh( ( W_p - x_p ) / L_n ) + np.cosh( ( W_p - x_p ) / L_n )
-    J_0n = a * ( b / c )
-    J_0n = J_0n * 1000
+    J_0n = a * ( b / c ) * 1000
+
 
     J_00 = 0.0
     J_00 = q * 1000 * ( x_n * ni_n / tau_p + x_p * ni_p / tau_n )
 
     J_000 = 0.0
-    J_000 = q * S_i * ( ( ( ( N_cp * N_vp ) / ( N_cn * N_vn ) ) ** 0.5 ) * ni_n + ni_p )
-    J_000 = J_000 * 1000
+    J_000 = q * 1000 * S_i * ( ( ( ( N_cp * N_vp ) / ( N_cn * N_vn ) ) ** 0.5 ) * ni_n + ni_p )
 
     Jdark = 0.0
     Jdark = ( J_0p + J_0n ) * ( np.exp( V / ( k_B * Ta ) ) - 1 ) + ( J_00 + J_000 ) * ( np.exp( V / ( 2 * k_B * Ta ) ) - 1 ) 
@@ -1406,7 +1399,7 @@ def Jc(V):
 def one_cell(valgraph):
     # DEPENDIENTE:
     global ni_p, n_0, alpha_p, V_ib, voltage, isCheck, S_i
-    ni_p = ( N_cp * N_vp * np.exp( - E_gp / ( k_B * Ta ) ) )**0.5 
+    ni_p = ( N_cp * N_vp * np.exp( - E_gp / ( k_B * Ta ) ) )**0.5
     n_0 = ni_p ** 2 / N_a
     isCheck = PrincipalPane.m_checkBox3.GetValue()
     alpha_p = function_alpha(wlengths, E_gp)
