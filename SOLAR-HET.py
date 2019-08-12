@@ -22,12 +22,11 @@ from matplotlib.backends.backend_wxagg import NavigationToolbar2WxAgg as Navigat
 ##########################################################################
 ## Constant values
 ##########################################################################
-
+global k_B, q, A, hv, eps_0
 k_B = 8.61e-5 #[eV/K]
 q = 1.6e-19 #[C] 4.803e−10[statC]
 A = 1e5
-h = 4.135e-15 #[eV s]6.626e34[J s]
-c = 3e10 #[cm/s]
+hv = 4.1356e-15 * 3e17 #[eV s]6.626e34[J s]
 eps_0 = 8.8542e-14
 
 ##########################################################################
@@ -348,7 +347,7 @@ class PrincipalPanel ( wx.Panel ):
 
 		gSizer4.Add( self.valS_p, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
 
-		self.valS_n = wx.TextCtrl( self.Sc_parameters, wx.ID_ANY, u"1.0e6", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.valS_n = wx.TextCtrl( self.Sc_parameters, wx.ID_ANY, u"1.0e7", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.valS_n.SetFont( wx.Font( 10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "Consolas" ) )
 		self.valS_n.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
 		self.valS_n.SetBackgroundColour( wx.Colour( 255, 255, 255 ) )
@@ -383,7 +382,7 @@ class PrincipalPanel ( wx.Panel ):
 
 		gSizer4.Add( self.valX_n, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
 
-		self.valN_a = wx.TextCtrl( self.Sc_parameters, wx.ID_ANY, u"1.0e17", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.valN_a = wx.TextCtrl( self.Sc_parameters, wx.ID_ANY, u"2.0e16", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.valN_a.SetFont( wx.Font( 10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "Consolas" ) )
 		self.valN_a.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
 		self.valN_a.SetBackgroundColour( wx.Colour( 255, 255, 255 ) )
@@ -412,7 +411,7 @@ class PrincipalPanel ( wx.Panel ):
 
 		bSizer181.Add( self.m_radioBtn2, 0, wx.ALIGN_CENTER|wx.ALL, 0 )
 
-		self.valLorT_p = wx.TextCtrl( self.Sc_parameters, wx.ID_ANY, u"8.0e-4", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.valLorT_p = wx.TextCtrl( self.Sc_parameters, wx.ID_ANY, u"2.9e-6", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.valLorT_p.SetFont( wx.Font( 10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "Consolas" ) )
 		self.valLorT_p.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
 		self.valLorT_p.SetBackgroundColour( wx.Colour( 255, 255, 255 ) )
@@ -437,7 +436,7 @@ class PrincipalPanel ( wx.Panel ):
 
 		bSizer191.Add( self.n_radioBtn4, 0, wx.ALIGN_CENTER|wx.ALL, 0 )
 
-		self.valLorT_n = wx.TextCtrl( self.Sc_parameters, wx.ID_ANY, u"2.9e-6", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.valLorT_n = wx.TextCtrl( self.Sc_parameters, wx.ID_ANY, u"2.31e-4", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.valLorT_n.SetFont( wx.Font( 10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "Consolas" ) )
 		self.valLorT_n.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
 		self.valLorT_n.SetBackgroundColour( wx.Colour( 255, 255, 255 ) )
@@ -486,7 +485,7 @@ class PrincipalPanel ( wx.Panel ):
 
 		gSizer4.Add( self.valW_pmin, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
 
-		self.valW_pmax = wx.TextCtrl( self.Sc_parameters, wx.ID_ANY, u"3.0e-4", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.valW_pmax = wx.TextCtrl( self.Sc_parameters, wx.ID_ANY, u"4.0e-4", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.valW_pmax.SetFont( wx.Font( 10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "Consolas" ) )
 		self.valW_pmax.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
 		self.valW_pmax.SetBackgroundColour( wx.Colour( 255, 255, 255 ) )
@@ -543,7 +542,7 @@ class PrincipalPanel ( wx.Panel ):
 		bSizer22 = wx.BoxSizer( wx.HORIZONTAL )
 
 		self.m_checkBox3 = wx.CheckBox( self.Sc_parameters, wx.ID_ANY, u"Interace recombination velocity:", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.m_checkBox3.SetValue(True)
+		self.m_checkBox3.SetValue(False)
 		bSizer22.Add( self.m_checkBox3, 0, wx.ALL, 8 )
 
 		self.valS_i = wx.TextCtrl( self.Sc_parameters, wx.ID_ANY, u"10e5", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -578,7 +577,7 @@ class PrincipalPanel ( wx.Panel ):
 
 		bSizer22.Add( self.m_staticText633, 0, wx.ALL, 8 )
 
-		self.valVib_steps = wx.TextCtrl( self.Sc_parameters, wx.ID_ANY, u"20", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.valVib_steps = wx.TextCtrl( self.Sc_parameters, wx.ID_ANY, u"200", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.valVib_steps.SetFont( wx.Font( 10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "Consolas" ) )
 		self.valVib_steps.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
 		self.valVib_steps.SetBackgroundColour( wx.Colour( 255, 255, 255 ) )
@@ -730,9 +729,9 @@ class PrincipalPanel ( wx.Panel ):
 		L_p, tau_p = checkfp()
 		L_n, tau_n = checkfn()
 		file_name = LoadFile(self)
-		Rneq = np.loadtxt(file_nameR, dtype=float, usecols=(1,), skiprows=1)
-		Tneq = np.loadtxt(file_nameT, dtype=float, usecols=(1,), skiprows=1)
-		wlengthsneq = np.loadtxt(file_name, dtype=float, usecols=(0,), skiprows=1)
+		Rneq = np.loadtxt(file_nameR, dtype=np.float_, usecols=(1,), skiprows=1)
+		Tneq = np.loadtxt(file_nameT, dtype=np.float_, usecols=(1,), skiprows=1)
+		wlengthsneq = np.loadtxt(file_name, dtype=np.float_, usecols=(0,), skiprows=1)
 		N_0neq = np.loadtxt(file_name, dtype=float, usecols=(1,), skiprows=1)
 		wlengths, N_0, R, T = [], [], [], []
 		for i in range(len(Rneq)):
@@ -745,8 +744,8 @@ class PrincipalPanel ( wx.Panel ):
 ###########################################################################
 ## Simulation
 ###########################################################################
-		wlengths = 1e-7 * np.array(wlengths, dtype='float64') #[cm]
-		N_0 = np.array(N_0, dtype='float64') / (1240.0/(wlengths*1e7))
+		wlengths = np.array(wlengths, dtype='float64') #[cm]
+		N_0 = np.array(N_0, dtype='float64')# / (1240.0/(wlengths*1e7))
 		T = np.array(T, dtype='float64')
 		R = np.array(R, dtype='float64')	
 		# values for thickness
@@ -1094,14 +1093,14 @@ class PrincipalPanel ( wx.Panel ):
 		for i in range(len(EQE0)):
 			if EQE0[i] == 0:
 				if EQE0[i-1] != [0]:
-					wlengthsQE.append(wlengths[i+1]*1e7)
+					wlengthsQE.append(wlengths[i+1])
 					IQE.append(0.0)
 					EQE.append(0.0)
 				pass
 			else:
 				if len(wlengthsQE) == 0:
-					wlengthsQE.append((wlengths[i]*1e7)-1)
-				wlengthsQE.append(wlengths[i]*1e7)
+					wlengthsQE.append((wlengths[i])-1)
+				wlengthsQE.append(wlengths[i])
 				IQE.append(IQE0[i])
 				EQE.append(EQE0[i])
 		wait += waiter
@@ -1244,10 +1243,10 @@ def checkfn():
 def function_alpha(wlengths, E_g):
 	ans = []
 	for wlength in wlengths:
-		if h*c/(wlength) <= E_g:
+		if hv/(wlength) <= E_g:
 			ans.append(0.0)
 		else:
-			ans.append( A * ( ( h*c/(wlength) - E_g ) )**0.5 )
+			ans.append( A * ( ( hv/(wlength) - E_g ) )**0.5 )
 	ans = np.array(ans, dtype='float64')
 	if E_g != E_gn:
 		global alpha_p
@@ -1302,6 +1301,7 @@ def fV_ib(E):
 # [All contributions & integration]
 
 def fdJ_ph(V):
+	
 	x_p = ( ( 2 * eps_p * eps_n * N_d * eps_0 * ( V_ib - V ) ) / ( N_a * q * ( eps_n * N_d + eps_p * N_a ) ) )**0.5
 	if x_p >= W_p:   # x_p value > W_p
 		x_p = W_p 
@@ -1313,88 +1313,93 @@ def fdJ_ph(V):
 # Photocurrent equations
 ###########################################################################
 	dJ_p = []
-	a = N_0 * (1 - R) * T * alpha_n * L_p / ( ( ( alpha_n ** 2 * L_p ** 2 ) - 1 ) )
-	b = ( S_p * L_p / D_p ) + alpha_n * L_p - np.exp( - alpha_n * ( W_n - x_n) ) * ( ( S_p * L_p / D_p) * np.cosh( ( W_n - x_n ) / L_p ) + np.sinh( ( W_n -x_n ) / L_p ) )
-	c = ( S_p * L_p / D_p ) * np.sinh( ( W_n - x_n ) / L_p ) + np.cosh( ( W_n - x_n ) / L_p )
-	d = alpha_n * L_p * np.exp( - alpha_n * (W_n - x_n) )
-	dJ_p = a * ( b / c - d)
-
+	AA = np.cosh(( W_n - x_n ) / L_p )
+	AB = np.sinh(( W_n - x_n ) / L_p )
+	AC = ( S_p * L_p ) / D_p
+	AD = alpha_n* L_p 
+	AE = N_0 * (1.0 - R) * T
+	AF = np.exp(( - alpha_n ) * (W_n - x_n ))
+	dJ_p  = (( AE * AD ) / (( AD**2 ) - 1)) * ((((AC+AD) - (AF * ( AC * AA + AB))) / (AC * AB+AA)) - AD * AF)
+	
 	dJ_n = []
-	a = N_0 * (1 - R) * T * alpha_p * L_n * np.exp( - (alpha_n * W_n + alpha_p * x_p) )  /  ( alpha_p**2 * L_n**2 - 1 )
-	b = ( S_n * L_n / D_n ) * ( np.cosh( ( W_p - x_p ) / L_n ) - np.exp( - alpha_p * ( W_p - x_p ) ) ) + np.sinh( ( W_p - x_p ) / L_n ) + alpha_p * L_n * np.exp( - alpha_p * ( W_p - x_p ) )
-	c = ( S_n * L_n / D_n ) * np.sinh( ( W_p - x_p ) / L_n ) + np.cosh( ( W_p - x_p ) / L_n )
-	d = alpha_p * L_n
-	dJ_n = a * ( d - b / c )
+	GA = alpha_p * L_n
+	GE = np.exp( - 1 * ( alpha_n * W_n + alpha_p * x_p ))
+	GI = ( S_n * L_n) / D_n
+	GO = np.cosh((W_p - x_p ) / L_n)
+	GU = np.exp( - alpha_p * ( W_p - x_p ))
+	GB = np.sinh(( W_p - x_p ) / L_n )
+	dJ_n  = (1 / 10) * ((AE * alpha_p * L_n) / (( alpha_p * L_n**2) - 1)) * np.exp(( - 1*(alpha_n *(W_n)+ alpha_p  * (x_p )))) * ( alpha_p *L_n - ((((S_n*L_n)/D_n) * (np.cosh(((W_p - x_p )) / L_n) - np.exp(( - 1* alpha_p  * (W_p - x_p )))))+(np.sinh(((W_p - x_p )) / L_n)+ alpha_p *L_n * np.exp(( - 1* alpha_p  * (W_p - x_p ))))) / ((((S_n*L_n)/D_n) * np.sinh(((W_p - x_p )) / L_n)) + np.cosh(((W_p - x_p )) / L_n)))
 
 	dJ_scr = []
-	dJ_scr = N_0 * (1 - R) * T * np.exp( - alpha_n * ( W_n - x_n ) ) * ( ( 1 - np.exp( - alpha_n * x_n ) ) + np.exp( - alpha_n * x_n ) * ( 1 - np.exp( - alpha_p * x_p ) ) )
+	FF = (np.exp(( - 1 * alpha_n  * x_n )))
+	FG = (np.exp(( - 1 * alpha_p  * x_p )))
+	dJ_scr  = (AE * AF) * ((1 - FF)+(FF * (1 - FG))) * (1 / 10)
 
 	dJ_RCEp = []
-	dJ_RCEp = N_0 * T * ( 1 - R) * np.exp( - alpha_n * W_n - alpha_p * ( 2 * W_p - x_p ) ) * ( 1 - np.exp( - alpha_p * x_p ) )
+	RA = np.exp(( - 1*(alpha_n *(W_n)+ alpha_p  * ((2*W_p) - x_p ))))
+	RB = np.exp(( - 1*(alpha_n *(W_n)+ alpha_p  * (2*W_p))))
+	RC = np.exp(( - 1*(alpha_n )))
+	dJ_RCEp = AE * RA * (1 - FG)
+	dJ_RCEp = dJ_RCEp * (1 / 10)
 
 	dJ_RCEn = []
-	dJ_RCEn = N_0 * T * ( 1 - R) * np.exp( - alpha_n * W_n - alpha_p * 2 * W_p ) * ( 1 - np.exp( - alpha_n ) )
-
+	dJ_RCEn = AE * RB * ( 1 - RC )
+	dJ_RCEn = dJ_RCEn * (1 / 10)
+	
 	dJ_abs = []
-	a = N_0 * T * ( 1 - R) * alpha_p * ( L_n / ( alpha_p ** 2 * L_n ** 2 - 1 ) ) * np.exp( - alpha_n * W_n - alpha_p * W_p )
-	b = alpha_p * L_n
-	c = S_n * L_n / D_n * ( np.cosh( ( W_p -x_p ) / L_n ) - np.exp( - alpha_p * ( W_p - x_p) )) + np.sinh( ( W_p -x_p ) / L_n ) + alpha_p * L_n * np.exp( - alpha_p * ( W_p - x_p ) )
-	d = S_n * L_n / D_n * np.sinh( ( W_p - x_p ) / L_n ) + np.cosh( ( W_p - x_p ) / L_n )
-	dJ_abs = a * ( b - c / d)
-
-
+	HA = np.exp( - 1.0 * (alpha_n * W_n + alpha_p  * W_p))
+	HB = np.exp( - 1.0 * (alpha_n * ( W_n + x_n ) + alpha_n * ( 2 * W_p )))
+	dJ_abs  = AE * ( alpha_p * L_n / (( alpha_p * L_n**2 ) - 1.0 )) * HA * ( alpha_p * L_n - (((( S_n * L_n ) / D_n) * ((np.cosh(((W_p - x_p )) / L_n) - np.exp(( - 1* alpha_p  * ( W_p - x_p ))))))+np.sinh(((W_p - x_p )) / L_n)+ alpha_p *L_n * (np.exp(( - 1* alpha_p  * ( W_p - x_p ))))) / (((( S_n * L_n ) / D_n ) * np.sinh((( W_p - x_p )) / L_n )) + np.cosh(((W_p - x_p )) / L_n)))
+	dJ_abs = dJ_abs * (1 / 10)
+	
+	GA2 = alpha_n * L_p 
 	dJ_win = []
-	a = N_0 * T * ( 1 - R) * alpha_n * L_p / ( alpha_n ** 2 * L_p ** 2 - 1 ) * np.exp( - alpha_n * ( W_n + x_n ) - alpha_p * ( 2 * W_p ) )
-	b = S_p * L_p / D_p * ( np.cosh( ( W_n - x_n ) / L_p ) - np.exp( -alpha_n * ( W_n - x_n ) ) ) + np.sinh( ( W_n - x_n ) / L_p ) + alpha_n * L_p * np.exp( alpha_n * ( W_n - x_n ) )
-	c = S_p * L_p / D_p * np.sinh( ( W_n - x_n ) / L_p ) + np.cosh( ( W_n - x_n ) / L_p )
-	dJ_win = a * ( alpha_n * L_p - b/c )
+	dJ_win = AE * ((AD) / ((AD**2) - 1)) * HB * (GA2 - ((AC * ((AA - AF)))+AB+AD * (AF)) / ((AC * AB)+AA))
+	dJ_win = dJ_win * (1 / 10)
 
 	ans = []
-	ans = dJ_p + dJ_n + dJ_scr + dJ_RCEp + (dJ_RCEn)  + dJ_abs + dJ_win
-	return ans 
+	ans = dJ_p + dJ_n + dJ_scr + dJ_RCEp + dJ_RCEn + dJ_abs + dJ_win
+	return ans
 
 
 def Jc(V):
-    x_p = ( ( 2 * eps_p * eps_n * N_d * eps_0 * ( V_ib - V ) ) / ( N_a * q * ( eps_n * N_d + eps_p * N_a ) ) )**0.5
-    if x_p >= W_p:   # x_p value > W_p
-        x_p = W_p 
+	AC = ( S_p * L_p ) / D_p
+	x_p = ( ( 2 * eps_p * eps_n * N_d * eps_0 * ( V_ib - V ) ) / ( N_a * q * ( eps_n * N_d + eps_p * N_a ) ) )**0.5
+	if x_p >= W_p:   # x_p value > W_p
+		x_p = W_p 
 
-    x_n = ( ( 2 * eps_p * eps_n * eps_0 * N_a * ( V_ib - V ) ) / ( N_d * q * ( eps_n * N_d + eps_p * N_a ) ) )**0.5
-    if x_n >= W_n:   # x_n value > W_n
-        x_n = W_n
+	x_n = ( ( 2 * eps_p * eps_n * eps_0 * N_a * ( V_ib - V ) ) / ( N_d * q * ( eps_n * N_d + eps_p * N_a ) ) )**0.5
+	if x_n >= W_n:   # x_n value > W_n
+		x_n = W_n
 ###########################################################################
 # Photocurrent equations
 ###########################################################################
-    dJ_ph = []
-    dJ_ph.append(fdJ_ph(V))
-    J_ph = 0
-    J_ph = integrate.simps(dJ_ph, wlengths*1e7, even='avg') * (1 / 10) #scipy.integrate.fixed_quad(func, a, b, args=(), n=5) -https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.fixed_quad.html#scipy.integrate.fixed_quad-
+	dJ_ph = []
+	dJ_ph.append(fdJ_ph(V))
+	J_ph = 0
+	J_ph = integrate.simps(dJ_ph, wlengths, even='avg') #scipy.integrate.fixed_quad(func, a, b, args=(), n=5) -https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.fixed_quad.html#scipy.integrate.fixed_quad-
 ###########################################################################
 # Dark photocurrent equations
 ###########################################################################
-    J_0p = 0.0
-    a = q * D_p * p_0 / L_p
-    b = ( S_p * L_p / D_p ) * np.cosh( ( W_n - x_n ) / L_p ) + np.sinh( ( W_n - x_n ) / L_p )
-    c = ( S_p * L_p / D_p ) * np.sinh( ( W_n - x_n ) / L_p ) + np.cosh( ( W_n - x_n ) / L_p )
-    J_0p = a * ( b / c ) * 1000
+	AA = np.cosh(( W_n - x_n ) / L_p )
+	AB = np.sinh(( W_n - x_n ) / L_p )
+	AC = ( S_p * L_p ) / D_p
+	J_0p = 0.0
+	J_0n = 0.0
+	J_00 = 0.0
+	J_000 = 0.0
+	tp = ( L_p**2)/ D_p       
+	tn = ( L_n**2) / D_n
+	no = ( ni_p**2) / N_a   
+	po = ( ni_n**2) / N_d
+	J_00  = 1000 * q*((x_n  * ni_n) / (( L_p**2) / D_p ) + ((x_p  * ni_p) / ((L_n**2) / D_n)))
+	J_0n  = 1000 * (( q * D_n * (ni_p**2) / N_a) / ( L_n )) * (((((S_n * L_n) / D_n) * np.cosh(((W_p - x_p )) / L_n))+np.sinh(((W_p - x_p )) / L_n)) / ((((S_n * L_n) / D_n) * np.sinh(((W_p - x_p )) / L_n)) + np.cosh(((W_p - x_p )) / L_n)))
+	J_0p  = 1000 * (( q * D_p * (ni_n**2) / N_d) / ( L_p )) * (((AC * AA) + AB) / ((AC * AB) + AA))
+	J_000 = q * 1000 * S_i * ( ((( N_cp * N_vp ) / ( N_cn * N_vn ))**(0.5)) * ni_n + ni_p )
+	Jdark = 0.0
+	Jdark = ( J_0p + J_0n ) * ( np.exp( V / ( k_B * Ta ) ) - 1 ) + ( J_00 + J_000 ) * ( np.exp( V / ( 2 * k_B * Ta ) ) - 1 ) 
 
-    J_0n = 0.0
-    a = q * D_n * n_0 / L_n
-    b = ( S_n * L_n / D_n ) * np.cosh( ( W_p - x_p ) / L_n ) + np.sinh( ( W_p - x_p ) / L_n )
-    c = ( S_n * L_n / D_n ) * np.sinh( ( W_p - x_p ) / L_n ) + np.cosh( ( W_p - x_p ) / L_n )
-    J_0n = a * ( b / c ) * 1000
-
-
-    J_00 = 0.0
-    J_00 = q * 1000 * ( x_n * ni_n / tau_p + x_p * ni_p / tau_n )
-
-    J_000 = 0.0
-    J_000 = q * 1000 * S_i * ( ( ( ( N_cp * N_vp ) / ( N_cn * N_vn ) ) ** 0.5 ) * ni_n + ni_p )
-
-    Jdark = 0.0
-    Jdark = ( J_0p + J_0n ) * ( np.exp( V / ( k_B * Ta ) ) - 1 ) + ( J_00 + J_000 ) * ( np.exp( V / ( 2 * k_B * Ta ) ) - 1 ) 
-
-    return J_ph - Jdark
+	return J_ph - Jdark
 
 def one_cell(valgraph):
     # DEPENDIENTE:
