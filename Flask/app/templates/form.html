@@ -1,0 +1,36 @@
+{% extends "templates/index.html" %} {% block title %} Parameters {% endblock %} {% block main %}
+<div class="container">
+    <div class="row">
+        <div class="column">
+            <form method="POST" action="{{ url_for('parameters') }}">
+                <br>
+
+
+                </br>
+                {{ form.D_n.label }}: {{ form.D_n }} {{ form.D_p.label }}: {{ form.D_p }}
+                <br> {{ form.eps_n.label }}: {{ form.eps_n }} {{ form.eps_p.label }}: {{ form.eps_p }}
+                <br> {{ form.N_a.label }}: {{ form.N_a }} {{ form.N_d.label }}: {{ form.N_d }}
+                <br> {{ form.N_cp.label }}: {{ form.N_cp }} {{ form.N_vp.label }}: {{ form.N_vp }}
+                <br> {{ form.N_cn.label }}: {{ form.N_cn }} {{ form.N_vn.label }}: {{ form.N_vn }}
+                <br> {{ form.S_n.label }}: {{ form.S_n }} {{ form.S_p.label }}: {{ form.S_p }}
+                <br> {{ form.W_n.label }}: {{ form.W_n }} {{ form.W_p.label }}: {{ form.W_p }}
+                <br> {{ form.W_pmin.label }}: {{ form.W_pmin }} {{ form.W_pmax.label }}: {{ form.W_pmax }}
+                <br> {{ form.X_n.label }}: {{ form.X_n }} {{ form.X_p.label }}: {{ form.X_p }}
+                <br> {{ form.S_i.label }}: {{ form.S_i }}
+                <br> {{ form.Steps.label }}: {{ form.Steps }} {{ form.Vib_steps.label }}: {{ form.Vib_steps }}
+                <br> {{ form.L_n.label }}: {{ form.L_n }} {{ form.L_p.label }}: {{ form.L_p }}
+            </form>
+        </div>
+        <div class="column">
+            <img src="{{ url_for('static', filename='img/cell2.PNG') }}" alt="">
+            <br>
+
+            </br>{{ form.file_name.label }}: {{ form.file_name }}
+            <br> {{ form.fileR.label }}: {{ form.fileR }}
+            <br> {{ form.fileT.label }}: {{ form.fileT }}
+            <br> {{ form.csrf_token }}
+        </div>
+    </div>
+    <input type="submit" value="Submit">
+</div>
+<img src="{{ url_for('static', filename='img/UN-Black1.png') }}" alt=""> {% endblock %}
