@@ -9,12 +9,6 @@ body {
 
 /* Create two equal columns that sits next to each other */
 
-.column {
-    flex: 50%;
-    padding: 10px;
-    /* Should be removed. Only for demonstration */
-}
-
 .center {
     display: flex;
     margin-left: auto;

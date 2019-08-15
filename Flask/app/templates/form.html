@@ -7,9 +7,10 @@
     <p>
         You can modify the following values, for new simulation press Run!
     </p>
-    <div class="row">
-        <div class="col">
-            <form method="POST" action="{{ url_for('parameters') }}">
+    <form action="{{ url_for('parameters') }}" method="POST" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col">
+
                 <label>{{ form.D_n.label }}</label> {{ form.D_n(class_="form-control") }}
                 <br>
                 <label>{{ form.eps_n.label }}</label>: {{ form.eps_n(class_="form-control") }}
@@ -22,22 +23,8 @@
                 <br>
                 <label>{{ form.S_n.label }}</label> {{ form.S_n(class_="form-control") }}
                 <br>
-                <label>{{ form.W_n.label }}</label> {{ form.W_n(class_="form-control") }}
-                <br>
-                <label>{{ form.W_pmin.label }}</label> {{ form.W_pmin(class_="form-control") }}
-                <br>
-                <label>{{ form.X_n.label }}</label> {{ form.X_n(class_="form-control") }}
-                <br>
-                <label>{{ form.Steps.label }}</label> {{ form.Steps(class_="form-control") }}
-                <br>
-                <label>{{ form.L_n.label }}</label> {{ form.L_n(class_="form-control") }}
-                <br>
-                <label>{{ form.S_i.label }}</label> {{ form.S_i(class_="form-control") }}
-                <br>
-            </form>
-        </div>
-        <div class="col">
-            <form method="POST" action="{{ url_for('parameters') }}">
+            </div>
+            <div class="col">
                 <label>{{ form.D_p.label }}</label> {{ form.D_p(class_="form-control") }}
                 <br>
                 <label>{{ form.eps_p.label }}</label>: {{ form.eps_p(class_="form-control") }}
@@ -50,30 +37,48 @@
                 <br>
                 <label>{{ form.S_p.label }}</label> {{ form.S_p(class_="form-control") }}
                 <br>
+
+            </div>
+            <div class="col">
+
+                <label>{{ form.X_n.label }}</label> {{ form.X_n(class_="form-control") }}
+                <br>
+                <label>{{ form.W_n.label }}</label> {{ form.W_n(class_="form-control") }}
+                <br>
+                <label>{{ form.W_pmin.label }}</label> {{ form.W_pmin(class_="form-control") }}
+                <br>
+                <label>{{ form.Steps.label }}</label> {{ form.Steps(class_="form-control") }}
+                <br>
+                <label>{{ form.L_n.label }}</label> {{ form.L_n(class_="form-control") }}
+                <br>
+                <label>{{ form.S_i.label }}</label> {{ form.S_i(class_="form-control") }}
+                <br>
+
+            </div>
+            <div class="col">
+
+                <label>{{ form.X_p.label }}</label> {{ form.X_p(class_="form-control") }}
+                <br>
                 <label>{{ form.W_p.label }}</label> {{ form.W_p(class_="form-control") }}
                 <br>
                 <label>{{ form.W_pmax.label }}</label> {{ form.W_pmax(class_="form-control") }}
                 <br>
-                <label>{{ form.X_p.label }}</label> {{ form.X_p(class_="form-control") }}
-                <br>
                 <label>{{ form.Vib_steps.label }}</label> {{ form.Vib_steps(class_="form-control") }}
                 <br>
                 <label>{{ form.L_p.label }}</label> {{ form.L_p(class_="form-control") }}
+                <br>
 
-            </form>
+            </div>
+            <div class="col">
+                <br><br><br><br><br><br><br><br> {{ form.file_name.label }}: {{ form.file_name(class_="form-control-file") }}
+                <br> {{ form.fileR.label }}: {{ form.fileR(class_="form-control-file") }}
+                <br> {{ form.fileT.label }}: {{ form.fileT(class_="form-control-file") }}
+                <br> {{ form.csrf_token }}
+            </div>
         </div>
-        <div class="col">
-            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-
-            </br>{{ form.file_name.label }}: {{ form.file_name(class_="form-control") }}
-            <br> {{ form.fileR.label }}: {{ form.fileR(class_="form-control") }}
-            <br> {{ form.fileT.label }}: {{ form.fileT(class_="form-control") }}
-            <br> {{ form.csrf_token }}
-        </div>
-    </div>
-    <br>
-
-    </br>
-    <input type="submit" value="Run!" class="center">
+        <br>
+        </br>
+        <input type="submit" value="Run!" class="center">
+    </form>
 </div>
 <img src="{{ url_for('static', filename='img/UN-Black1.png') }}" alt="un" class='right'> {% endblock %}
