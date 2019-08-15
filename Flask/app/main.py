@@ -9,8 +9,6 @@ class parametersForm(FlaskForm):
     D_p = StringField('D_p', default='0.65', validators=[DataRequired()])
     eps_p = StringField('eps_p', default='13.6', validators=[DataRequired()])
     eps_n = StringField('eps_n', default='10.0', validators=[DataRequired()])
-    E_gn = StringField('E_gn', default='2.42', validators=[DataRequired()])
-    E_gp = StringField('E_gp', default='1.17', validators=[DataRequired()])
     N_a = StringField('N_a', default='2.0e16', validators=[DataRequired()])
     N_d = StringField('N_d', default='1.0e17', validators=[DataRequired()])
     N_cp = StringField('N_cp', default='2.2e18', validators=[DataRequired()])
@@ -41,6 +39,10 @@ class parametersForm(FlaskForm):
 def index():
     return render_template('home.html')
 
+@app.route("/info")
+def info():
+    return render_template('info.html')
+
 @app.route("/graphics")
 def graphics():
     return render_template('graphics.html')
@@ -50,4 +52,4 @@ def parameters():
     form = parametersForm()
     if form.validate_on_submit():
         return 'Parameters submitted.'
-    return render_template('form.html', form=form)
+    return render_template('form.html', form=form )

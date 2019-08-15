@@ -1,36 +1,79 @@
 {% extends "templates/index.html" %} {% block title %} Parameters {% endblock %} {% block main %}
 <div class="container">
+    <h4>
+        Parameters
+    </h4>
+    <hr>
+    <p>
+        You can modify the following values, for new simulation press Run!
+    </p>
     <div class="row">
-        <div class="column">
+        <div class="col">
             <form method="POST" action="{{ url_for('parameters') }}">
+                <label>{{ form.D_n.label }}</label> {{ form.D_n(class_="form-control") }}
                 <br>
-
-
-                </br>
-                {{ form.D_n.label }}: {{ form.D_n }} {{ form.D_p.label }}: {{ form.D_p }}
-                <br> {{ form.eps_n.label }}: {{ form.eps_n }} {{ form.eps_p.label }}: {{ form.eps_p }}
-                <br> {{ form.N_a.label }}: {{ form.N_a }} {{ form.N_d.label }}: {{ form.N_d }}
-                <br> {{ form.N_cp.label }}: {{ form.N_cp }} {{ form.N_vp.label }}: {{ form.N_vp }}
-                <br> {{ form.N_cn.label }}: {{ form.N_cn }} {{ form.N_vn.label }}: {{ form.N_vn }}
-                <br> {{ form.S_n.label }}: {{ form.S_n }} {{ form.S_p.label }}: {{ form.S_p }}
-                <br> {{ form.W_n.label }}: {{ form.W_n }} {{ form.W_p.label }}: {{ form.W_p }}
-                <br> {{ form.W_pmin.label }}: {{ form.W_pmin }} {{ form.W_pmax.label }}: {{ form.W_pmax }}
-                <br> {{ form.X_n.label }}: {{ form.X_n }} {{ form.X_p.label }}: {{ form.X_p }}
-                <br> {{ form.S_i.label }}: {{ form.S_i }}
-                <br> {{ form.Steps.label }}: {{ form.Steps }} {{ form.Vib_steps.label }}: {{ form.Vib_steps }}
-                <br> {{ form.L_n.label }}: {{ form.L_n }} {{ form.L_p.label }}: {{ form.L_p }}
+                <label>{{ form.eps_n.label }}</label>: {{ form.eps_n(class_="form-control") }}
+                <br>
+                <label>{{ form.N_a.label }}</label> {{ form.N_a(class_="form-control") }}
+                <br>
+                <label>{{ form.N_cn.label }}</label> {{ form.N_cn(class_="form-control") }}
+                <br>
+                <label>{{ form.N_vn.label }}</label> {{ form.N_vn(class_="form-control") }}
+                <br>
+                <label>{{ form.S_n.label }}</label> {{ form.S_n(class_="form-control") }}
+                <br>
+                <label>{{ form.W_n.label }}</label> {{ form.W_n(class_="form-control") }}
+                <br>
+                <label>{{ form.W_pmin.label }}</label> {{ form.W_pmin(class_="form-control") }}
+                <br>
+                <label>{{ form.X_n.label }}</label> {{ form.X_n(class_="form-control") }}
+                <br>
+                <label>{{ form.Steps.label }}</label> {{ form.Steps(class_="form-control") }}
+                <br>
+                <label>{{ form.L_n.label }}</label> {{ form.L_n(class_="form-control") }}
+                <br>
+                <label>{{ form.S_i.label }}</label> {{ form.S_i(class_="form-control") }}
+                <br>
             </form>
         </div>
-        <div class="column">
-            <img src="{{ url_for('static', filename='img/cell2.PNG') }}" alt="">
-            <br>
+        <div class="col">
+            <form method="POST" action="{{ url_for('parameters') }}">
+                <label>{{ form.D_p.label }}</label> {{ form.D_p(class_="form-control") }}
+                <br>
+                <label>{{ form.eps_p.label }}</label>: {{ form.eps_p(class_="form-control") }}
+                <br>
+                <label>{{ form.N_d.label }}</label> {{ form.N_d(class_="form-control") }}
+                <br>
+                <label>{{ form.N_cp.label }}</label> {{ form.N_cp(class_="form-control") }}
+                <br>
+                <label>{{ form.N_vp.label }}</label> {{ form.N_vp(class_="form-control") }}
+                <br>
+                <label>{{ form.S_p.label }}</label> {{ form.S_p(class_="form-control") }}
+                <br>
+                <label>{{ form.W_p.label }}</label> {{ form.W_p(class_="form-control") }}
+                <br>
+                <label>{{ form.W_pmax.label }}</label> {{ form.W_pmax(class_="form-control") }}
+                <br>
+                <label>{{ form.X_p.label }}</label> {{ form.X_p(class_="form-control") }}
+                <br>
+                <label>{{ form.Vib_steps.label }}</label> {{ form.Vib_steps(class_="form-control") }}
+                <br>
+                <label>{{ form.L_p.label }}</label> {{ form.L_p(class_="form-control") }}
 
-            </br>{{ form.file_name.label }}: {{ form.file_name }}
-            <br> {{ form.fileR.label }}: {{ form.fileR }}
-            <br> {{ form.fileT.label }}: {{ form.fileT }}
+            </form>
+        </div>
+        <div class="col">
+            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+            </br>{{ form.file_name.label }}: {{ form.file_name(class_="form-control") }}
+            <br> {{ form.fileR.label }}: {{ form.fileR(class_="form-control") }}
+            <br> {{ form.fileT.label }}: {{ form.fileT(class_="form-control") }}
             <br> {{ form.csrf_token }}
         </div>
     </div>
-    <input type="submit" value="Submit">
+    <br>
+
+    </br>
+    <input type="submit" value="Run!" class="center">
 </div>
-<img src="{{ url_for('static', filename='img/UN-Black1.png') }}" alt=""> {% endblock %}
+<img src="{{ url_for('static', filename='img/UN-Black1.png') }}" alt="un" class='right'> {% endblock %}
