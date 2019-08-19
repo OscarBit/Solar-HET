@@ -11,68 +11,67 @@
         <div class="row">
             <div class="col">
 
-                <label>{{ form.D_n.label }}</label> {{ form.D_n(class_="form-control") }}
+                <label><i><b>D<sub>n</sub> </b></i> (cm<sup>2</sup>s<sup>-1</sup>)</label> {{ form.D_n(class_="form-control") }}
                 <br>
-                <label>{{ form.eps_n.label }}</label>: {{ form.eps_n(class_="form-control") }}
+                <label><i><b>&epsilon;<sub>n</sub></b></i></label>: {{ form.eps_n(class_="form-control") }}
                 <br>
-                <label>{{ form.N_a.label }}</label> {{ form.N_a(class_="form-control") }}
+                <label><i><b>N<sub>a</sub> </b></i> (cm<sup>-3</sup>)</label> {{ form.N_a(class_="form-control") }}
                 <br>
-                <label>{{ form.N_cn.label }}</label> {{ form.N_cn(class_="form-control") }}
+                <label><i><b>N<sub>c</sub> </b></i> (cm<sup>-3</sup>)</label> {{ form.N_cn(class_="form-control") }}
                 <br>
-                <label>{{ form.N_vn.label }}</label> {{ form.N_vn(class_="form-control") }}
+                <label><i><b>N<sub>v</sub> </b></i> (cm<sup>-3</sup>)</label> {{ form.N_vn(class_="form-control") }}
                 <br>
-                <label>{{ form.S_n.label }}</label> {{ form.S_n(class_="form-control") }}
+                <label><i><b>S<sub>n</sub> </b></i> (cm/s)</label> {{ form.S_n(class_="form-control") }}
+                <br>
+                <label><i><b>E<sub>g</sub> </b></i> Window Layer (eV)</label> {{ form.E_gn(class_="form-control") }}
                 <br>
             </div>
             <div class="col">
-                <label>{{ form.D_p.label }}</label> {{ form.D_p(class_="form-control") }}
+                <label><i><b>D<sub>p</sub> </b></i> (cm<sup>2</sup>s<sup>-1</sup>)</label> {{ form.D_p(class_="form-control") }}
                 <br>
-                <label>{{ form.eps_p.label }}</label>: {{ form.eps_p(class_="form-control") }}
+                <label><i><b>&epsilon;<sub>p</sub></b></i></label>: {{ form.eps_p(class_="form-control") }}
                 <br>
-                <label>{{ form.N_d.label }}</label> {{ form.N_d(class_="form-control") }}
+                <label><i><b>N<sub>d</sub> </b></i> (cm<sup>-3</sup>)</label> {{ form.N_d(class_="form-control") }}
                 <br>
-                <label>{{ form.N_cp.label }}</label> {{ form.N_cp(class_="form-control") }}
+                <label><i><b>N<sub>c</sub> </b></i> (cm<sup>-3</sup>)</label> {{ form.N_cp(class_="form-control") }}
                 <br>
-                <label>{{ form.N_vp.label }}</label> {{ form.N_vp(class_="form-control") }}
+                <label><i><b>N<sub>v</sub> </b></i> (cm<sup>-3</sup>)</label> {{ form.N_vp(class_="form-control") }}
                 <br>
-                <label>{{ form.S_p.label }}</label> {{ form.S_p(class_="form-control") }}
+                <label><i><b>S<sub>p</sub> </b></i> (cm/s)</label> {{ form.S_p(class_="form-control") }}
                 <br>
-
+                <label><i><b>E<sub>g</sub> </b></i> Absorber Layer(eV)</label> {{ form.E_gp(class_="form-control") }}
+                <br>
             </div>
             <div class="col">
-
-                <label>{{ form.X_n.label }}</label> {{ form.X_n(class_="form-control") }}
+                <label><i><b>L<sub>n</sub> </b></i> (cm)</label> {{ form.L_n(class_="form-control") }}
                 <br>
-                <label>{{ form.W_n.label }}</label> {{ form.W_n(class_="form-control") }}
+                <label><i><b>&chi;;<sub>n</sub> </b></i> (eV)</label> {{ form.X_n(class_="form-control") }}
                 <br>
-                <label>{{ form.W_pmin.label }}</label> {{ form.W_pmin(class_="form-control") }}
+                <label><i><b>W<sub>n</sub> </b></i> (cm)</label> {{ form.W_n(class_="form-control") }}
                 <br>
-                <label>{{ form.Steps.label }}</label> {{ form.Steps(class_="form-control") }}
+                <label><i><b>W<sub>n</sub> </b></i> minimum(cm)</label> {{ form.W_pmin(class_="form-control") }}
                 <br>
-                <label>{{ form.L_n.label }}</label> {{ form.L_n(class_="form-control") }}
+                <label><i><b>Steps </b></i></label> {{ form.Steps(class_="form-control") }}
                 <br>
-                <label>{{ form.S_i.label }}</label> {{ form.S_i(class_="form-control") }}
-                <br>
-
             </div>
             <div class="col">
-
-                <label>{{ form.X_p.label }}</label> {{ form.X_p(class_="form-control") }}
+                <label><i><b>L<sub>p</sub> </b></i> (cm)</label> {{ form.L_p(class_="form-control") }}
                 <br>
-                <label>{{ form.W_p.label }}</label> {{ form.W_p(class_="form-control") }}
+                <label><i><b>&chi;<sub>p</sub> </b></i> (eV)</label> {{ form.X_p(class_="form-control") }}
                 <br>
-                <label>{{ form.W_pmax.label }}</label> {{ form.W_pmax(class_="form-control") }}
+                <label><i><b>W<sub>p</sub> </b></i> (cm)</label> {{ form.W_p(class_="form-control") }}
                 <br>
-                <label>{{ form.Vib_steps.label }}</label> {{ form.Vib_steps(class_="form-control") }}
+                <label><i><b>W<sub>p</sub> </b></i> maximum(cm)</label> {{ form.W_pmax(class_="form-control") }}
                 <br>
-                <label>{{ form.L_p.label }}</label> {{ form.L_p(class_="form-control") }}
+                <label><i><b>Voltage steps </b></i></label> {{ form.Vib_steps(class_="form-control") }}
                 <br>
-
+                <label><i><b>S<sub>i</sub> </b></i> (cm/s)</label> {{ form.S_i(class_="form-control") }}
+                <br>
             </div>
             <div class="col">
-                <br><br><br><br><br><br><br><br> {{ form.file_name.label }}: {{ form.file_name(class_="form-control-file") }}
+                <br><br><br><br><br><br><br><br><b> {{ form.file_name.label }}: {{ form.file_name(class_="form-control-file") }}
                 <br> {{ form.fileR.label }}: {{ form.fileR(class_="form-control-file") }}
-                <br> {{ form.fileT.label }}: {{ form.fileT(class_="form-control-file") }}
+                <br> {{ form.fileT.label }}: {{ form.fileT(class_="form-control-file") }}</b>
                 <br> {{ form.csrf_token }}
             </div>
         </div>
@@ -81,4 +80,4 @@
         <input type="submit" value="Run!" class="center">
     </form>
 </div>
-<img src="{{ url_for('static', filename='img/UN-Black1.png') }}" alt="un" class='right'> {% endblock %}
+{% endblock %}

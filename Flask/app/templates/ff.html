@@ -1,7 +1,10 @@
 {% extends "templates/indexgraph.html" %} {% block title %} Graphics {% endblock %} {% block main %}
 <div class="container">
     <h2>
-        Nothing yet!
+        Success!
     </h2>
+    <div class="container">
+        <img src="{{ url_for('static', filename='img/FF8-300dpi.png') }}" alt="Chart" height="100%" width="100%">
+    </div>
 </div>
 {% endblock %} {% block script %}{% endblock %}

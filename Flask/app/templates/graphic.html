@@ -1,0 +1,18 @@
+{% extends "templates/indexgraph.html" %} {% block title %} Graphics {% endblock %} {% block main %}
+<div class="container">
+    <h2>
+        Success!
+    </h2>
+    <div class="container">
+        <img src="{{ url_for('static', filename='img/JV8-300dpi.png') }}" alt="Chart" height="100%" width="100%">
+        <div class="row">
+            <div class="col">
+                <img src="{{ url_for('static', filename='img/QE8-300dpi.png') }}" alt="Chart" height="100%" width="100%">
+            </div>
+            <div class='col'>
+                <img src="{{ url_for('static', filename='img/RT8-300dpi.png') }}" alt="Chart" height="100%" width="100%">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} {% block script %}{% endblock %}

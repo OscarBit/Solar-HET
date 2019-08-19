@@ -1,6 +1,7 @@
 import numpy as np
 import xlrd
 from scipy import integrate
+from app import app, main
 
 #Constants Boltzmann constant, electron charge, Temperature, electrostatic field?, 
 
@@ -9,44 +10,8 @@ q = 1.6e-19 #[C] 4.803e−10[statC]
 A = 1e5
 h = 4.135e-15 #[eV s]6.626e34[J s]
 c = 3e10 #[cm/s]
-eps_0 = 8.8541e-14
-#Read parameters file
+eps_0 = 8.8542e-14
 
-#read the data of ASTM G173-03 Reference Spectra Derived from SMARTS v. 2.9.2
-"""
-#input('\\nName of file whit reflectance data [NAME.xls]: ') 
-#'REFLECTANCE.xls'
-book2 = xlrd.open_workbook(fileR)
-#input('\\nName of file whit Transmittance data [NAME.xls]: ') 
-#'Transmitancia.xlsx'
-book3 = xlrd.open_workbook(fileT)
-sheet2 = book2.sheet_by_index(0)
-sheet3 = book3.sheet_by_index(0)
-book = xlrd.open_workbook(file_name)
-sheet = book.sheet_by_index(0)
-wlengths,  N_0, R, T = [], [], [], []
-rows = []
-
-#nn = min([len(R)],)
-for i in range(1141):#sheet.nrows):#, row in enumerate(range(sheet.nrows)):
-    if i <= 1:
-        continue
-    r, r2, r3 = [], [], []
-    for j in [0,1]:
-        r.append(sheet.cell_value(i, j))
-        r2.append(sheet2.cell_value(i, j))
-        r3.append(sheet3.cell_value(i, j))
-    rows.append(r)
-    wlengths.append(float(r[0]))
-    N_0.append((r[1]))
-    R.append(float(r2[1]))
-    T.append(float(r3[1]))
-wlengths = np.array(wlengths, dtype=np.float_) #[cm]
-N_0 = np.array(N_0, dtype=np.float_)
-T = np.array(T, dtype=np.float_)
-R = np.array(R, dtype=np.float_)
-hv = np.array(4.1356e-15 * 3e17 / wlengths, dtype=np.float_)
-"""
 def functionx_p(V):
     ans = ( ( 2 * eps_p * eps_n * N_d * eps_0 * ( V_bi - V ) ) / ( N_a * q * ( eps_n * N_d + eps_p * N_a ) ) )**0.5
     if ans >= W_p:
@@ -61,7 +26,7 @@ def functionx_n(V):
         ans = W_n
     return ans
 
-def function_alpha(wlengths, E_g):
+def function_alpha(hv, E_g):
     ans = []
     for hvi in hv:
         if hvi <= E_g:
@@ -87,9 +52,9 @@ def fV_bi(E):
 
 def dJ_p(V):
     x_p = functionx_p(V)
-    x_n = functionx_n(V)
-    a = N_0 * (1.0 - R) * T * alpha_n * L_p / ( ( ( alpha_n ** 2 * L_p ** 2 ) - 1.0 ) )    
-    b = ( S_p * L_p / D_p ) + alpha_n * L_p - np.exp( - alpha_n * ( W_n - x_n) ) * ( ( S_p * L_p / D_p) * np.cosh( ( W_n - x_n ) / L_p ) + np.sinh( ( W_n -x_n ) / L_p ) )
+    x_n = functionx_n(V)  
+    a = N_0 * (1.0 - R) * T * alpha_n * L_p / ( ( ( alpha_n ** 2 * L_p ** 2 ) - 1.0 ) )  
+    b = ( S_p * L_p / D_p ) + alpha_n * L_p - np.exp( - alpha_n * ( W_n - x_n) ) * ( ( S_p * L_p / D_p) * np.cosh( ( W_n - x_n ) / L_p ) + np.sinh( ( W_n - x_n ) / L_p ) )
     c = ( S_p * L_p / D_p ) * np.sinh( ( W_n - x_n ) / L_p ) + np.cosh( ( W_n - x_n ) / L_p )
     d = alpha_n * L_p * np.exp( - alpha_n * (W_n - x_n) )
     ans = a*( b/c - d)
@@ -145,14 +110,9 @@ def dJ_win(V):
 ### All contributions & integration
 
 def dJ_ph(V):
-    ans =dJ_p(V) + dJ_scr(V) + dJ_n(V) + (dJ_win(V) + dJ_RCEn(V) + (dJ_RCEp(V))  + dJ_abs(V)) 
+    ans = dJ_scr(V) + dJ_p(V) + dJ_n(V) + (dJ_win(V) + dJ_RCEn(V) + (dJ_RCEp(V))  + dJ_abs(V)) 
     # others functions for the secound part of the calculation [OFF]
     return ans * (1.0 / 10)
-
-def intdJ_ph(V):
-    ans = itg(dJ_ph(V))
-    return ans
-
 ### Dark Photocurrent equations 
 
 def J_0p(V):
@@ -186,102 +146,66 @@ def Jdark(V):
     return ans
 
 def Jcell(V):
-    ans = intdJ_ph(V) - Jdark(V) 
+    ans = itg(dJ_ph(V)) - Jdark(V) 
     return ans
-"""
-thickness = np.linspace(W_pmin, W_pmax, num=Steps, endpoint=True) 
-gap = np.linspace(1.0, 2.0, num=Steps, endpoint=True) 
-ni_n = ( N_cn * N_vn * np.exp( - E_gn / ( k_B * Ta ) ) )**0.5 
-p_0 = ni_n ** 2 / N_d                          
-alpha_n = function_alpha(wlengths, E_gn)       
-count = 0
-E_gp = np.float_(1.17)
-alpha_p = function_alpha(wlengths, E_gp)
-ni_p = ( N_cp * N_vp * np.exp( - E_gp / ( k_B * Ta ) ) )**0.5 
-n_0 = ni_p ** 2 / N_a
-V_bi = fV_bi(E_gp)
-Efi_list, Voc_list, FF_list, Jsc_list, Jcell_w, Volt_w = [], [], [], [], [], []
-voltage = np.linspace(0,(V_bi),num=(Vib_steps*2),endpoint=True)
-V_oc, FF, Efi, J_sc = 0, 0, 0, 0
-Jone, Vone = [], []
-for n in range(len(voltage)):
-    j = Jcell(voltage[n])
-    if j <= 0:
-        pass 
-    else:
-        Jone.append(j)
-        Vone.append(voltage[n])
-aa = voltage[len(Vone)-1]
-bb = Jone[len(Vone)-1]
-cc = voltage[len(Vone)]
-dd = (Jcell(voltage[len(Vone)]))
-#points for calculate
-V_oc = Voc(aa, bb, cc, dd)
-Vone.append(V_oc)
-Jone.append(0.0)
-Efi = max(np.multiply(Jone, Vone))
-J_sc = max(Jone)
-FF = 100 * Efi / ( V_oc * J_sc )
-print('\n')
-print('Results for input parameters:')
-print('Efficiency: ',(Efi),'Voc: ',(V_oc),'Jsc: ',(J_sc),'FF: ',(FF))
-print('\n')
 
-data_1 = []
-thickness = np.linspace(W_pmin, W_pmax, num=Steps, endpoint=True) 
-gap = np.linspace(1.0, 2.0, num=Steps, endpoint=True) 
-ni_n = ( N_cn * N_vn * np.exp( - E_gn / ( k_B * Ta ) ) )**0.5 
-p_0 = ni_n ** 2 / N_d                          
-alpha_n = function_alpha(wlengths, E_gn)       
-count = 0
-E_gp = np.float_(1.17)
-alpha_p = function_alpha(wlengths, E_gp)
-ni_p = ( N_cp * N_vp * np.exp( - E_gp / ( k_B * Ta ) ) )**0.5 
-n_0 = ni_p ** 2 / N_a
-V_bi = fV_bi(E_gp)
-Efi_list, Voc_list, FF_list, Jsc_list, Jcell_w, Volt_w = [], [], [], [], [], []
-voltage = np.linspace(0,(V_bi),num=(Vib_steps*2),endpoint=True)
-print('[','*'*int(waiter),'-'*int(100-waiter),']')
-for WW in thickness:
-    V_oc, FF, Efi, J_sc = 0, 0, 0, 0
-    W_p = WW
-    jcell, v = [], []
-    for n in range(len(voltage)):
-        j = Jcell(voltage[n])
-        if j <= 0:
-            pass 
-        else:
-            jcell.append(j)
-            v.append(voltage[n])
-    aa = voltage[len(v)-1]
-    bb = jcell[len(v)-1]
-    cc = voltage[len(v)]
-    dd = (Jcell(voltage[len(v)]))
-    #points for calculate
-    V_oc = Voc(aa, bb, cc, dd)
-    v.append(V_oc)
-    jcell.append(0.0)
-    Efi = max(np.multiply(jcell, v))
-    J_sc = max(jcell)
-    FF = 100 * Efi / ( V_oc * J_sc )
-    Efi_list.append(Efi)
-    Voc_list.append(V_oc)
-    Jsc_list.append(J_sc)
-    FF_list.append(FF)
-    waiter += wait
-    print('[','*'*int(waiter),'-'*int(100-waiter),']')
-data_1 = [thickness, Efi_list, Voc_list, FF_list, Jsc_list]
-data_1 = np.array(data_1, dtype=np.float_)
+#Read parameters file
+Ta = 300 #K
+def valvalues(Ta, E_gn, E_gp, D_n, D_p, eps_p, eps_n, N_a, N_d, N_cp, N_vp, N_cn, N_vn, S_n, S_p, W_n, W_p, W_pmin, W_pmax, X_n, X_p, S_i, Steps, Vib_steps, L_n, L_p, wlengthsneq, N_0neq, Rneq, Tneq, nn):
+    alpha_n, alpha_p, wlengths, N_0, R, T, hv = np.empty((7,0), dtype=np.float_)
+    nn = nn
+    globals()['E_gn'] = E_gn
+    globals()['E_gp'] = E_gp
+    globals()['D_n'] = D_n
+    globals()['D_p'] = D_p
+    globals()['eps_p'] = eps_p
+    globals()['eps_n'] = eps_n
+    globals()['N_a'] = N_a
+    globals()['N_d'] = N_d
+    globals()['N_cp'] = N_cp
+    globals()['N_vp'] = N_vp
+    globals()['N_cn'] = N_cn
+    globals()['N_vn'] = N_vn
+    globals()['S_n'] = S_n
+    globals()['S_p'] = S_p
+    globals()['W_n'] = W_n
+    globals()['W_p'] = W_p
+    globals()['W_pmin'] = W_pmin
+    globals()['W_pmax'] = W_pmax
+    globals()['X_n'] = X_n
+    globals()['X_p'] = X_p
+    globals()['S_i'] = S_i
+    globals()['Steps'] = Steps
+    globals()['Vib_steps'] = Vib_steps
+    globals()['L_n'] = L_n
+    globals()['L_p'] = L_p
+    for i in range(nn):
+        wlengths = np.r_[wlengths, wlengthsneq[i]]
+        N_0 = np.r_[N_0, N_0neq[i]]
+        R = np.r_[R, Rneq[i]]
+        T = np.r_[T, Tneq[i]]
+    globals()
+    globals()['wlengths'] = np.array(wlengths, dtype=np.float_)
+    globals()['N_0'] = np.array(N_0, dtype=np.float_)
+    globals()['T'] = np.array(T, dtype=np.float_)
+    globals()['R'] = np.array(R, dtype=np.float_)
+    hv = np.r_[hv, 4.1356e-15 * 3e17 / wlengths]
+    globals()['hv'] = np.array(hv, dtype=np.float_)
+    globals()['ni_n'] = ( N_cn * N_vn * np.exp( - E_gn / ( k_B * Ta ) ) )**0.5 
+    globals()['ni_p'] = ( N_cp * N_vp * np.exp( - E_gp / ( k_B * Ta ) ) )**0.5 
+    globals()['p_0'] = ni_n ** 2 / N_d    
+    globals()['n_0'] = ni_p ** 2 / N_a 
+    globals()['alpha_p'] = np.r_[alpha_p, function_alpha(hv, E_gp)]
+    globals()['alpha_n'] = np.r_[alpha_n, function_alpha(hv, E_gn)]
+    globals()['V_bi'] =  fV_bi(E_gp)
+    globals()['tau_p'] = L_p ** 2 / D_p
+    globals()['tau_n'] =  L_n ** 2 / D_n
+    return R, T, wlengths, hv, N_0, V_bi, alpha_n, alpha_p
+    #global Ta, E_gn, E_gp, D_n, D_p, eps_p, eps_n, N_a, N_d, N_cp, N_vp, N_cn, N_vn, S_n, S_p, W_n, W_p, W_pmin, W_pmax, X_n, X_p, S_i, Steps, Vib_steps, L_n, L_p
 
-EQE0 = dJ_ph(0) * 10/ N_0
-IQE0 = EQE0 / ( 1.0 - R )
-wlengthsQE = []
-EQE = []
-IQE = []
-for i in range(len(EQE0)):
-    if EQE0[i] == 0:
-        pass
-    else:
-        EQE.append(EQE0[i])
-        wlengthsQE.append(wlengths[i])
-        IQE.append(IQE0[i])"""
+def rolling(W_p):
+        globals()['W_p'] = W_p
+        return W_p
+
+#read the data of ASTM G173-03 Reference Spectra Derived from SMARTS v. 2.9.2
+
